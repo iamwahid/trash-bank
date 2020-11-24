@@ -47,3 +47,19 @@ field = user_name, address, sex
 ## delete
 DELETE /api/admin/warga/{id}
 ```
+
+# API Bank Sampah
+```
+## list warga + barang
+GET /api/kasir
+## tukar barang
+POST /api/kasir/tukar_barang/{id_warga}
+field = barang, count
+## ambil point
+POST /api/kasir/ambil_point/{id_warga}
+field = point
+respon = trx_id, status
+## konfirmasi pengambilan
+POST /api/kasir/konfirmasi/{id_warga}
+field = trx_id, verif_code
+```

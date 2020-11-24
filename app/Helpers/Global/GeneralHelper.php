@@ -41,3 +41,24 @@ if (! function_exists('home_route')) {
         return 'frontend.index';
     }
 }
+
+if (! function_exists('barcode_class')) {
+    function barcode_class($code, $type = 'QRCODE', $col = 10, $row = 10) {
+        return new class($code, $type, $col, $row){
+            public $png;
+            public $html;
+            public $plain;
+
+            function __construct($code, $type, $col, $row)
+            {
+                $this->png = "data:image/png;base64,".DNS2D::getBarcodePNG($code, $type ,$col, $row);
+                $this->html = "<img src='" . $this->png . "' alt='barcode'/>";
+                $this->plain = $code;
+            }
+            function __toString()
+            {
+                return $this->png;
+            }
+        };;
+    }
+}

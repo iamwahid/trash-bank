@@ -191,6 +191,7 @@ return [
         App\Providers\ObserverServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
+        Milon\Barcode\BarcodeServiceProvider::class,
     ],
 
     /*
@@ -242,5 +243,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         // Package Aliases
+        'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+        'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
     ],
 ];

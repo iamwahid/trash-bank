@@ -8,7 +8,6 @@ use App\Models\Warga;
 use App\Repositories\Backend\Auth\UserRepository;
 use App\Repositories\Backend\WargaRepository;
 use Illuminate\Support\Facades\Validator;
-use phpDocumentor\Reflection\Types\Void_;
 
 class WargaController extends Controller
 {
@@ -22,7 +21,7 @@ class WargaController extends Controller
 
     public function index()
     {
-        $warga = $this->warga->get();
+        $warga = $this->warga->rt(request()->get('rt') ?? '')->get();
         return response()->json($warga, 200);
     }
 

@@ -71,4 +71,10 @@ class Warga extends Model
 
         return $html;
     }
+
+    public function scopeRt($query, $rt = '')
+    {
+        if (!$rt) return $query;
+        return $query->where('rt', $rt);
+    }
 }

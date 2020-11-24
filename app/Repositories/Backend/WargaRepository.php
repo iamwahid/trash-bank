@@ -4,6 +4,7 @@ namespace App\Repositories\Backend;
 
 use App\Events\Backend\Auth\User\UserPermanentlyDeleted;
 use App\Exceptions\GeneralException;
+use App\Models\Barang;
 use App\Models\Warga;
 use App\Repositories\Backend\Auth\UserRepository;
 use App\Repositories\BaseRepository;
@@ -24,75 +25,80 @@ class WargaRepository extends BaseRepository
         return Warga::class;
     }
 
-    // for siswa
-    public function tukarBarang(Warga $siswa, $data)
+    // for warga
+    public function tukarBarang(Warga $warga, Barang $barang, $data)
     {
-        $data = array_merge([
-            'type' => 'jual',
-            'verified' => true
-        ], $data);
-        // dd($siswa->point_total + $data['point_total']);
-        $siswa->points()->create($data);
-        $siswa->update(['point_total' => $data['point_total'] ]);
+        $total = (int) $data['count'] * $barang->point;
+        $data['description'] = $barang->name.' ('.$data['count'].' x '.$barang->point.') '.$total.' Point';
+        $data['point'] = $barang->point;
+        $data['point_total'] = $warga->point_total + $total;
+        $data['type'] = 'jual';
+        $data['verified'] = true;
+
+        $warga->points()->create($data);
+        $warga->update(['point_total' => $data['point_total'] ]);
     }
 
-    public function tukarPoint(Warga $siswa, $data)
+    public function ambilPoint(Warga $warga, $data)
     {
-        $code = strtolower(Str::random(5));
-        $data = array_merge([
-            'type' => 'beli',
-            // 'point_total' => $siswa->point_total, // point awal
-            'verif_code' => $code,
-        ], $data);
-        // $res = $siswa->point_total - $data['jumlah_point'];
-        $trx = $siswa->points()->create($data);
+        $total = (int)$data['point'];
+        
+        if ($total > (int) $warga->point_total) return response()->json(['message' => 'Point tidak cukup'], 422);
+        $data['description'] = 'Ambil point = '.$total;
+        $data['point'] = $total;
+        $data['point_total'] = $warga->point_total;
+        $data['type'] = 'beli';
+        $data['verif_code'] = strtolower(Str::random(14));
+
+        $trx = $warga->points()->create($data);
         session()->put('trx_id', $trx->id );
-        // $siswa->update(['point_total' => $siswa->point_total - $data['jumlah_point'] ]);
-        $siswa->save();
+        $warga->save();
+
+        return response()->json(['trx_id' => $trx->id, 'status' => 'unverified']);
     }
 
-    public function konfirmasi(Warga $siswa, $code)
+    public function konfirmasi(Warga $warga, $data)
     {
-        $trx = session()->get('trx_id');
-        $trx = $siswa->points()->where('id', '=', $trx)->get()->first();
-        if ($this->validateCode($siswa, $code) && $trx && $siswa->point_total >= $trx->point) {
-            $point_total = $siswa->point_total - $trx->point;
-            $siswa->update([
-                'point_total' => $point_total,
-            ]);
+        $trx = $warga->points()->where('id', '=', $data['trx_id'] ?? session()->get('trx_id'))->get()->first();
+        
+        if ($trx && ($trx->verif_code == $data['verif_code'])) {
+            if ($warga->point_total < $trx->point) return response()->json(['message' => 'Point tidak Cukup'], 422);
+            $point_total = $warga->point_total - $trx->point;
+            $warga->point_total = $point_total;
             $trx->update([
                 'point_total' => $point_total,
                 'verified' => true
             ]);
+            $warga->save();
             session()->forget('trx_id');
-            return true;
+            return response()->json(['message' => 'Berhasil Verifikasi']);
         }
-        return false;
+        return response()->json(['message' => 'Kode Verifikasi tidak Valid'], 422);
     }
 
-    public function getLatestCode(Warga $siswa)
+    public function getLatestCode(Warga $warga)
     {
-        if (!$siswa->id) return;
-        $latest = $siswa->points->first();
+        if (!$warga->id) return;
+        $latest = $warga->points->first();
         if (!$latest) return;
         return $latest->verif_code;
     }
 
     //for kasir
-    public function validateCode(Warga $siswa, $code)
+    public function validateCode(Warga $warga, $code)
     {
-        if (!$code || !$siswa->id) return;
-        $latest = $this->getLatestCode($siswa);
+        if (!$code || !$warga->id) return;
+        $latest = $this->getLatestCode($warga);
         return $latest && $latest == $code;
     }
 
     public function deleteById($id) : bool
     {
         $this->unsetClauses();
-        $siswa = $this->getById($id);
-        $user = $siswa->user;
-        $siswa->points()->delete();
-        $siswa->delete();
+        $warga = $this->getById($id);
+        $user = $warga->user;
+        $warga->points()->delete();
+        $warga->delete();
 
         $user->passwordHistories()->delete();
         if ($user->forceDelete()) {

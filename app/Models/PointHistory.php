@@ -10,6 +10,7 @@ class PointHistory extends Model
     protected $fillable = [
         'warga_id',
         'type',
+        'count',
         'description',
         'point',
         'point_total',
