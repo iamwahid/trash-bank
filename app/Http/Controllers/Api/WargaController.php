@@ -21,7 +21,11 @@ class WargaController extends Controller
 
     public function index()
     {
-        $warga = $this->warga->rt(request()->get('rt') ?? '')->get();
+        $warga = $this->user->with('warga')
+                ->role(config('access.users.default_role'))
+                ->rt(request()->get('rt') ?? '')
+                ->name(request()->get('name') ?? '')
+                ->get();
         return response()->json($warga, 200);
     }
 
@@ -45,8 +49,13 @@ class WargaController extends Controller
         $data = $validator->validated();
 
         $name = explode(' ', $data['user_name']);
+        $first = $name[0];
+        unset($name[0]);
+        $last = implode(' ', $name);
+        
         $duser = [
-            'first_name' => $name[0],
+            'first_name' => $first,
+            'last_name' => $last,
             'email' => $data['email'],
             'mobile' => $data['mobile'],
             'password' => $data['password'],
@@ -55,8 +64,6 @@ class WargaController extends Controller
             'confirm_agreement' => $data['confirm_agreement'] ?? false,
             'roles' => [config('access.users.default_role')]
         ];
-        unset($name[0]);
-        $duser['last_name'] = implode(' ', $name);
         $user = $this->user->create($duser);
 
         $user->warga()->create([

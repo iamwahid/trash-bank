@@ -27,10 +27,10 @@ return [
 
         // The name of the super administrator role
         'admin_role' => 'admin',
-        'executive_role' => 'kasir',
+        'executive_role' => 'koordinator',
 
         // The default role all new registered users get added to
-        'default_role' => 'user',
+        'default_role' => 'warga',
 
         /*
          * Whether or not new users need to be approved by an administrator before logging in

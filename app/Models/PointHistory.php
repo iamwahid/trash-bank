@@ -22,6 +22,10 @@ class PointHistory extends Model
         'verified' => 'boolean'
     ];
 
+    protected $hidden = [
+        'verif_code'
+    ];
+
     public function warga()
     {
         return $this->belongsTo(Warga::class, 'warga_id');
@@ -37,5 +41,14 @@ class PointHistory extends Model
         // '<a href="'.$edit.'" class="btn btn-success">Edit</a>'.
         // '<a href="'.$delete.'" class="btn btn-danger">Delete</a>'.
         // '</div>';
+    }
+
+    public function getBarcodeAttribute()
+    {
+        if (!$this->verified && $this->verif_code) {
+            $barcode = barcode_class($this->verif_code);
+            return $barcode->png;
+        }
+        return '';
     }
 }

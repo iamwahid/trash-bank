@@ -11,15 +11,25 @@ GET /api/auth/logout
 POST /api/auth/refresh
 ```
 
-# API CRUD Barang 
-jenis barang (type)
- - plastik
- - kertas
- - logam
- - kaca
- - lain
+# API User Home
 ```
-field = name, point, type
+GET /api/home
+GET /api/transaksi
+
+POST /api/ambil_point
+field = point
+respon = trx_id, status
+
+POST /api/update_profile
+field = name, email, avatar_type, avatar_location
+
+POST /api/update_password
+field = old_password, password, password_confirmation
+```
+
+# API CRUD Barang 
+```
+field = name, point, type [plastik,kertas,logam,kaca,lain]
 ## list
 GET /api/admin/barang
 ## create
@@ -38,12 +48,15 @@ DELETE /api/admin/barang/{id}
 GET /api/admin/warga
 ## create
 POST /api/admin/warga
-field = email, user_name, mobile, address, sex, password, password_confirmation, confirm_agreement, rt, is_koordinator
+field = email, user_name, mobile, address, sex, password, password_confirmation, confirm_agreement, rt [01-14], is_koordinator
+
 ## show
 GET /api/admin/warga/{id}
+
 ## update
 POST /api/admin/warga/{id}
 field = user_name, address, sex
+
 ## delete
 DELETE /api/admin/warga/{id}
 ```
@@ -55,11 +68,19 @@ GET /api/kasir
 ## tukar barang
 POST /api/kasir/tukar_barang/{id_warga}
 field = barang, count
+
 ## ambil point
 POST /api/kasir/ambil_point/{id_warga}
 field = point
 respon = trx_id, status
+
 ## konfirmasi pengambilan
 POST /api/kasir/konfirmasi/{id_warga}
 field = trx_id, verif_code
+```
+
+# API Config
+```
+GET /api/config/rt_list
+GET /api/config/barang_type
 ```

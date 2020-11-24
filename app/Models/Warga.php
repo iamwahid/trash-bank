@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Auth\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Warga extends Model
 {
@@ -20,7 +21,7 @@ class Warga extends Model
     ];
 
     protected $appends = [
-        'last_point',
+        // 'last_point',
         'last_info'
     ];
 
@@ -76,5 +77,14 @@ class Warga extends Model
     {
         if (!$rt) return $query;
         return $query->where('rt', $rt);
+    }
+
+    public function scopeName($query, $name = '')
+    {
+        if (!$name) return $query;
+        return $query->whereHas('user', function($q) use ($name){
+            return $q->where(DB::raw('concat(users.first_name," ",users.last_name)') , 'LIKE' , '%'.$name.'%');
+            // return $q->where(DB::raw('users.first_name || " " || users.last_name') , 'LIKE' , '%'.$name.'%');
+        });
     }
 }
