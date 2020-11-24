@@ -1,0 +1,12 @@
+Barang
+ - type 
+ - nama
+ - point (by kg)
+
+ type
+ - plastik
+    
+ - kertas
+ - logam
+ - kaca
+ - lain
