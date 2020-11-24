@@ -14,7 +14,7 @@ class AddColumnPointsTable extends Migration
     public function up()
     {
         Schema::table('point_history', function (Blueprint $table) {
-            $table->integer('count')->default(0)->after('verifed');
+            $table->integer('count')->default(0)->after('verified');
         });
     }
 
