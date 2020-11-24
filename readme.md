@@ -38,7 +38,7 @@ DELETE /api/admin/barang/{id}
 GET /api/admin/warga
 ## create
 POST /api/admin/warga
-field = email, user_name, mobile, address, sex, password, password_confirmation, confirm_agreement
+field = email, user_name, mobile, address, sex, password, password_confirmation, confirm_agreement, rt, is_koordinator
 ## show
 GET /api/admin/warga/{id}
 ## update
