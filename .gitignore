@@ -28,3 +28,4 @@ output.txt
 coverage.xml
 /coverage
 .phpunit.result.cache
+*.sqlite
