@@ -35,6 +35,8 @@ class WargaController extends Controller
             'password' => 'required|string|confirmed',  
             // 'place_of_birth' => 'required|string',
             // 'birth_date' => 'required|string',
+            'rt' => 'string',
+            'is_koordinator' => 'boolean',
             'address' => 'required|string',
             'sex' => 'required|string',
             'confirm_agreement' => 'required',
@@ -63,6 +65,8 @@ class WargaController extends Controller
             // 'birth_date' => $data['birth_date'],
             'address' => $data['address'],
             'sex' => $data['sex'],
+            'rt' => $data['rt'],
+            'is_koordinator' => $data['is_koordinator']
         ]);
 
         return response()->json(['message' => 'created'], 200);
@@ -75,8 +79,10 @@ class WargaController extends Controller
             'user_name' => ['string'], 
             // 'place_of_birth' => 'required|string',
             // 'birth_date' => 'required|string',
+            'rt' => 'string',
+            'is_koordinator' => 'boolean',
             'address' => 'string',
-            'sex' => 'string', 
+            'sex' => 'string',
         ]);
 
         $warga->user->name = $data['user_name'];

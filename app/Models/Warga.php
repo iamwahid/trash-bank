@@ -14,6 +14,8 @@ class Warga extends Model
         'birth_date',
         'address',
         'sex',
+        'rt',
+        'is_koordinator',
         'point_total',
     ];
 

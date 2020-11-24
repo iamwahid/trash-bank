@@ -75,7 +75,7 @@ class ApiLoginController extends Controller
         
         $data = $validator->validated();
         $credentials = Arr::only($data, ['email', 'password']);
-        if(!Auth::attempt($credentials, $data['remember_me']))
+        if(!Auth::attempt($credentials, $data['remember_me'] ?? null))
             return response()->json([
                 'message' => 'Unauthorized'
             ], 401);
