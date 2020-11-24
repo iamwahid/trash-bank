@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Warga;
 use App\Repositories\Backend\Auth\UserRepository;
 use App\Repositories\Backend\WargaRepository;
+use Illuminate\Support\Facades\Validator;
 use phpDocumentor\Reflection\Types\Void_;
 
 class WargaController extends Controller
@@ -27,7 +28,7 @@ class WargaController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $validator = Validator::make($request->all(), [
             'user_name' => 'required|string', 
             'email' => 'required|string|email|unique:users',
             'mobile' => 'required|string|unique:users',
@@ -38,6 +39,9 @@ class WargaController extends Controller
             'sex' => 'required|string',
             'confirm_agreement' => 'required',
         ]);
+        if ($validator->fails()) return response()->json(['errors' => $validator->errors()], 422);
+        
+        $data = $validator->validated();
 
         $name = explode(' ', $data['user_name']);
         $duser = [
@@ -68,11 +72,11 @@ class WargaController extends Controller
     {
         if (!$warga->id) return;
         $data = $request->validate([
-            'user_name' => ['required', 'string'], 
+            'user_name' => ['string'], 
             // 'place_of_birth' => 'required|string',
             // 'birth_date' => 'required|string',
-            'address' => 'required|string',
-            // 'sex' => 'required|string', 
+            'address' => 'string',
+            'sex' => 'string', 
         ]);
 
         $warga->user->name = $data['user_name'];

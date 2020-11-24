@@ -17,6 +17,11 @@ class Warga extends Model
         'point_total',
     ];
 
+    protected $appends = [
+        'last_point',
+        'last_info'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -35,7 +40,7 @@ class Warga extends Model
         return $last;
     }
 
-    public function getLastAttribute()
+    public function getLastPointAttribute()
     {
         $latest = $this->points->first();
         return $latest;

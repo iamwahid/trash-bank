@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Barang;
 use App\Repositories\Backend\BarangRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class BarangController extends Controller
 {
@@ -36,12 +37,15 @@ class BarangController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => ['required', 'string'],
             'point' => ['required', 'numeric'],
             'type' => ['required']
         ]);
 
+        if ($validator->fails()) return response()->json(['errors' => $validator->errors()], 422);
+        
+        $data = $validator->validated();
         $this->barang->create($data);
         return response()->json(['message' => 'created'], 200);
     }
@@ -67,11 +71,15 @@ class BarangController extends Controller
     public function update(Request $request, Barang $barang)
     {
         if (!$barang->id) return;
-        $data = $request->validate([
+        
+        $validator = Validator::make($request->all(), [
             'name' => ['required', 'string'],
             'point' => ['required', 'numeric'],
             'type' => ['required']
         ]);
+        if ($validator->fails()) return response()->json(['errors' => $validator->errors()], 422);
+        
+        $data = $validator->validated();
 
         $barang->update($data);
         return response()->json(['message' => 'updated'], 200);
