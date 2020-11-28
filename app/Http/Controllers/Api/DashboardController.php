@@ -7,7 +7,7 @@ use App\Http\Requests\Frontend\User\UpdatePasswordRequest;
 use App\Repositories\Backend\BarangRepository;
 use App\Repositories\Backend\WargaRepository;
 use App\Repositories\Frontend\Auth\UserRepository;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -38,7 +38,8 @@ class DashboardController extends Controller
     public function transaksi(Request $request)
     {
         $user = auth()->user();
-        $transaksi = $user->warga->points->map(function($d){
+        $type = $request->get('type') ?? '';
+        $transaksi = $user->warga->points()->type($type)->get()->map(function($d){
             return $d->append('barcode');
         });
         return response()->json($transaksi);

@@ -18,8 +18,8 @@ class PointHistory extends Model
         'verified'
     ];
 
-    public $cast = [
-        'verified' => 'boolean'
+    protected $casts = [
+        'verified' => 'boolean',
     ];
 
     protected $hidden = [
@@ -47,9 +47,15 @@ class PointHistory extends Model
     {
         if (!$this->verified && $this->verif_code) {
             $barcode = base64_encode(implode('-', [$this->id, $this->warga_id, $this->verif_code]));
-            $barcode = barcode_class($barcode);
+            $barcode = barcode_class($barcode, 'QRCODE', 20, 20);
             return $barcode->png;
         }
         return '';
+    }
+
+    public function scopeType($query, $type = '')
+    {
+        if (!$type) return $query;
+        return $query->where('type', $type);
     }
 }
