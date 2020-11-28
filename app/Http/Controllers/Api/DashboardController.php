@@ -32,7 +32,7 @@ class DashboardController extends Controller
     public function index()
     {
         $user = auth()->user();
-        return response()->json([$this->user->with('warga')->getById($user->id)]);
+        return response()->json($this->user->with('warga')->getById($user->id));
     }
 
     public function transaksi(Request $request)

@@ -77,6 +77,10 @@ respon = trx_id, status
 ## konfirmasi pengambilan
 POST /api/kasir/konfirmasi/{id_warga}
 field = trx_id, verif_code
+
+## langsung scan barcode
+POST /api/kasir/scan
+field = barcode
 ```
 
 # API Config

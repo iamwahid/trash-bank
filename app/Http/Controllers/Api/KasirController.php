@@ -68,4 +68,16 @@ class KasirController extends Controller
 
         return $this->warga->konfirmasi($warga, $data);
     }
+
+    public function scanBarcode(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'barcode' => 'required',
+        ]);
+        if ($validator->fails()) return response()->json(['errors' => $validator->errors()], 422);
+
+        $data = $validator->validated();
+        
+        return $this->warga->scanBarcode($data['barcode']);
+    }
 }

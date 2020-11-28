@@ -46,7 +46,8 @@ class PointHistory extends Model
     public function getBarcodeAttribute()
     {
         if (!$this->verified && $this->verif_code) {
-            $barcode = barcode_class($this->verif_code);
+            $barcode = base64_encode(implode('-', [$this->id, $this->warga_id, $this->verif_code]));
+            $barcode = barcode_class($barcode);
             return $barcode->png;
         }
         return '';

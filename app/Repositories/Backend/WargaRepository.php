@@ -107,4 +107,17 @@ class WargaRepository extends BaseRepository
         return false;
     }
 
+    public function scanBarcode($barcode)
+    {
+        $decoded = base64_decode($barcode, true);
+        if ($decoded) {
+            $parts = explode('-', $decoded);
+            $trx_id = $parts[0];
+            $warga = $this->getById($parts[1]);
+            $verif_code = $parts[2];
+            return $this->konfirmasi($warga, compact(['trx_id', 'verif_code']));
+        }
+        return response()->json(['message' => 'Data tidak Valid'], 422);
+    }
+
 }
