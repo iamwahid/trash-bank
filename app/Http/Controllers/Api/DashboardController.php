@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\User\UpdatePasswordRequest;
+use App\Models\PointHistory;
 use App\Repositories\Backend\BarangRepository;
 use App\Repositories\Backend\WargaRepository;
 use App\Repositories\Frontend\Auth\UserRepository;
@@ -43,6 +44,16 @@ class DashboardController extends Controller
             return $d->append('barcode');
         });
         return response()->json($transaksi);
+    }
+
+    public function transaksiShow(Request $request, PointHistory $point)
+    {
+        $user = auth()->user();
+        $point = $user->warga->points()->where('id', $point)->first();
+        if ($point) {
+            return response()->json($point->append('barcode'));
+        }
+        return response()->json([], 404);
     }
 
     public function ambil_point()

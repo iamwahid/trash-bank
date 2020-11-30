@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\PointHistory;
 use App\Models\Warga;
 use App\Repositories\Backend\Auth\UserRepository;
 use App\Repositories\Backend\BarangRepository;
 use App\Repositories\Backend\WargaRepository;
 use Illuminate\Support\Facades\Validator;
-use phpDocumentor\Reflection\Types\Void_;
 
 class KasirController extends Controller
 {
@@ -69,7 +69,7 @@ class KasirController extends Controller
         return $this->warga->konfirmasi($warga, $data);
     }
 
-    public function scanBarcode(Request $request)
+    public function verifyBarcode(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'barcode' => 'required',
@@ -79,5 +79,24 @@ class KasirController extends Controller
         $data = $validator->validated();
         
         return $this->warga->scanBarcode($data['barcode']);
+    }
+
+    public function getByBarcode(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'barcode' => 'required',
+        ]);
+        if ($validator->fails()) return response()->json(['errors' => $validator->errors()], 422);
+
+        $data = $validator->validated();
+
+        $decoded = $this->warga->decodeBarcode($data['barcode']);
+
+        if ($decoded) {
+            $transaksi = PointHistory::with(['warga.user'])->find($decoded[0]);
+            return response()->json($transaksi);
+        }
+
+        return response()->json([], 404);
     }
 }

@@ -32,7 +32,7 @@ class WargaRepository extends BaseRepository
         $data['description'] = $barang->name.' ('.$data['count'].' x '.$barang->point.') '.$total.' Point';
         $data['point'] = $barang->point;
         $data['point_total'] = $warga->point_total + $total;
-        $data['type'] = 'jual';
+        $data['type'] = 'tukar';
         $data['verified'] = true;
 
         $warga->points()->create($data);
@@ -47,7 +47,7 @@ class WargaRepository extends BaseRepository
         $data['description'] = 'Ambil point = '.$total;
         $data['point'] = $total;
         $data['point_total'] = $warga->point_total;
-        $data['type'] = 'beli';
+        $data['type'] = 'ambil';
         $data['verif_code'] = strtolower(Str::random(14));
 
         $trx = $warga->points()->create($data);
@@ -107,13 +107,24 @@ class WargaRepository extends BaseRepository
         return false;
     }
 
-    public function scanBarcode($barcode)
+    public function decodeBarcode($barcode)
     {
         $decoded = base64_decode($barcode, true);
+        $parts = [];
         if ($decoded) {
             $parts = explode('-', $decoded);
+            $parts[1] = $this->getById($parts[1]);
+        }
+        return $parts;
+    }
+
+    public function scanBarcode($barcode)
+    {
+        $decoded = $this->decodeBarcode($barcode);
+        if ($decoded) {
+            $parts = $decoded;
             $trx_id = $parts[0];
-            $warga = $this->getById($parts[1]);
+            $warga = $parts[1];
             $verif_code = $parts[2];
             return $this->konfirmasi($warga, compact(['trx_id', 'verif_code']));
         }
