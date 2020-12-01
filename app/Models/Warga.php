@@ -21,7 +21,9 @@ class Warga extends Model
     ];
 
     protected $appends = [
-        // 'last_point',
+        'name',
+        'email',
+        'mobile',
         'last_info'
     ];
 
@@ -71,6 +73,21 @@ class Warga extends Model
         }
 
         return $html;
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->user->name;
+    }
+
+    public function getEmailAttribute()
+    {
+        return $this->user->email;
+    }
+
+    public function getMobileAttribute()
+    {
+        return $this->user->mobile;
     }
 
     public function scopeRt($query, $rt = '')

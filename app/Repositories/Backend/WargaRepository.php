@@ -29,14 +29,16 @@ class WargaRepository extends BaseRepository
     public function tukarBarang(Warga $warga, Barang $barang, $data)
     {
         $total = (int) $data['count'] * $barang->point;
-        $data['description'] = $barang->name.' ('.$data['count'].' x '.$barang->point.') '.$total.' Point';
+        $point_total = $warga->point_total + $total;
+        $data['description'] = $barang->name.' ('.$data['count'].' x '.$barang->point.') '.$total.' Point | '.$point_total.' Point Total';
         $data['point'] = $barang->point;
-        $data['point_total'] = $warga->point_total + $total;
+        $data['point_total'] = $total;
         $data['type'] = 'tukar';
         $data['verified'] = true;
 
         $warga->points()->create($data);
-        $warga->update(['point_total' => $data['point_total'] ]);
+        $warga->point_total = $point_total;
+        $warga->save();
     }
 
     public function ambilPoint(Warga $warga, $data)
@@ -44,9 +46,9 @@ class WargaRepository extends BaseRepository
         $total = (int)$data['point'];
         
         if ($total > (int) $warga->point_total) return response()->json(['message' => 'Point tidak cukup'], 422);
-        $data['description'] = 'Ambil point = '.$total;
+        $data['description'] = 'Ambil '.$total.' Point';
         $data['point'] = $total;
-        $data['point_total'] = $warga->point_total;
+        $data['point_total'] = $total;
         $data['type'] = 'ambil';
         $data['verif_code'] = strtolower(Str::random(14));
 
@@ -63,12 +65,11 @@ class WargaRepository extends BaseRepository
         
         if ($trx && ($trx->verif_code == $data['verif_code'])) {
             if ($warga->point_total < $trx->point) return response()->json(['message' => 'Point tidak Cukup'], 422);
-            $point_total = $warga->point_total - $trx->point;
+            $point_total = $warga->point_total - $trx->point_total;
             $warga->point_total = $point_total;
-            $trx->update([
-                'point_total' => $point_total,
-                'verified' => true
-            ]);
+            $trx->verified = true;
+            $trx->description = $trx->description . ' | '.$point_total.' Point Total';
+            $trx->save();
             $warga->save();
             session()->forget('trx_id');
             return response()->json(['message' => 'Berhasil Verifikasi']);

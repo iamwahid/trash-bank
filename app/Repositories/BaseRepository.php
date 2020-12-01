@@ -16,7 +16,7 @@ abstract class BaseRepository implements RepositoryContract
      *
      * @var \Illuminate\Database\Eloquent\Model
      */
-    protected $model;
+    public $model;
 
     /**
      * The query builder.
