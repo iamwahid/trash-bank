@@ -123,7 +123,7 @@ class WargaRepository extends BaseRepository
         return $parts;
     }
 
-    public function scanBarcode($barcode)
+    public function scanTrxBarcode($barcode)
     {
         $decoded = $this->decodeBarcode($barcode);
         if ($decoded) {
@@ -134,6 +134,17 @@ class WargaRepository extends BaseRepository
             return $this->konfirmasi($warga, compact(['trx_id', 'verif_code']));
         }
         return response()->json(['message' => 'Data tidak Valid'], 422);
+    }
+
+    public function scanBarcode($barcode)
+    {
+        $decoded = $this->decodeBarcode($barcode);
+        if ($decoded) {
+            $parts = $decoded;
+            $warga = $parts[1];
+            return response()->json($warga);
+        }
+        return response()->json([], 404);
     }
 
 }

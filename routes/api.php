@@ -15,6 +15,7 @@ Route::group(['prefix' => 'auth'], function () {
     
     Route::group(['middleware' => 'auth:api' ], function() {
         Route::get('profile', [ApiLoginController::class, 'user']);
+        Route::get('barcode', [ApiLoginController::class, 'myBarcode']);
 
         Route::get('logout', [ApiLoginController::class, 'logout']);
         Route::post('refresh', [ApiLoginController::class, 'refresh']);
@@ -56,7 +57,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:api', /*'role:admin'*/
 Route::group(['prefix' => 'kasir', 'middleware' => ['auth:api', /*'role:koordinator'*/]], function () {
     Route::get('', [KasirController::class, 'index']);
     Route::post('verify', [KasirController::class, 'verifyBarcode']);
-    Route::post('scan', [KasirController::class, 'getByBarcode']);
+    Route::post('scan', [KasirController::class, 'getByTrxBarcode']);
+    Route::post('scan_warga', [KasirController::class, 'getByBarcode']);
     Route::post('tukar_barang/{warga}', [KasirController::class, 'tukar_barang']);
     Route::post('ambil_point/{warga}', [KasirController::class, 'ambil_point']);
     Route::post('konfirmasi/{warga}', [KasirController::class, 'konfirmasi']);

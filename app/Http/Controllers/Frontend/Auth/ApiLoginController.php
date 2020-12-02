@@ -150,4 +150,14 @@ class ApiLoginController extends Controller
             'token' => $token,
         ]);
     }
+
+    public function myBarcode()
+    {
+        $user = auth()->user();
+        if ($user->warga) {
+            return response()->json(['message' => barcode_class(base64_encode(implode('-', [$user->id, $user->warga->id])), 'QRCODE', 25, 25)->png]);
+        }
+
+        return response()->json([], 404);
+    }
 }

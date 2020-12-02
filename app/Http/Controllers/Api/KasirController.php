@@ -78,10 +78,10 @@ class KasirController extends Controller
 
         $data = $validator->validated();
         
-        return $this->warga->scanBarcode($data['barcode']);
+        return $this->warga->scanTrxBarcode($data['barcode']);
     }
 
-    public function getByBarcode(Request $request)
+    public function getByTrxBarcode(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'barcode' => 'required',
@@ -98,5 +98,17 @@ class KasirController extends Controller
         }
 
         return response()->json([], 404);
+    }
+
+    public function getByBarcode(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'barcode' => 'required',
+        ]);
+        if ($validator->fails()) return response()->json(['errors' => $validator->errors()], 422);
+
+        $data = $validator->validated();
+
+        return $this->warga->scanBarcode($data['barcode']);
     }
 }
