@@ -150,11 +150,10 @@ class BarangTableSeeder extends Seeder
         ];
 
         foreach ($barang as $b) {
-            Barang::create([
-                'name' => $b['name'],
-                'type' => $b['type'],
-                'point' => $b['point']
-            ]);
+            $exist = Barang::where('name', $b['name'])->first();
+            if (!$exist) {
+                Barang::create($b);
+            }
         }
 
     }

@@ -25,7 +25,7 @@ class BarangController extends Controller
     {
         $type = request()->get('type') ?? '';
         $grouped = request()->get('grouped') ?? '';
-        $barang = $this->barang->type($type)->get();
+        $barang = $this->barang->type($type)->orderBy('type')->get();
         return response()->json($barang, 200);
     }
 

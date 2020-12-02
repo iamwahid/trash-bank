@@ -10,10 +10,15 @@ class Barang extends Model
     protected $fillable = [
         'name',
         'point',
-        'type'
+        'type',
+        'counter'
     ];
 
     public $timestamps = false;
+
+    protected $casts = [
+        'counter' => 'integer'
+    ];
 
     public function getActionsAttribute()
     {
