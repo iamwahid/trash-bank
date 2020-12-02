@@ -68,13 +68,18 @@ class WargaRepository extends BaseRepository
         $trx = $warga->points()->where('id', '=', $data['trx_id'] ?? session()->get('trx_id'))->get()->first();
         
         if ($trx && ($trx->verif_code == $data['verif_code'])) {
-            if ($warga->point_total < $trx->point) return response()->json(['message' => 'Point tidak Cukup'], 422);
-            $point_total = $warga->point_total - $trx->point_total;
-            $warga->point_total = $point_total;
-            $trx->verified = true;
-            $trx->description = $trx->description . ' | '.$point_total.' Point Total';
-            $trx->save();
-            $warga->save();
+            if ($trx->type == 'ambil') {
+                if ($warga->point_total < $trx->point) return response()->json(['message' => 'Point tidak Cukup'], 422);
+                $point_total = $warga->point_total - $trx->point_total;
+                $warga->point_total = $point_total;
+                $trx->verified = true;
+                $trx->description = $trx->description . ' | '.$point_total.' Point Total';
+                $trx->save();
+                $warga->save();
+            } else {
+                $trx->verified = true;
+                $trx->save();
+            }
             session()->forget('trx_id');
             return response()->json(['message' => 'Berhasil Verifikasi']);
         }
