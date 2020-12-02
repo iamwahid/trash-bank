@@ -75,7 +75,8 @@ class BarangController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string'],
             'point' => ['required', 'numeric'],
-            'type' => ['required']
+            'type' => ['required'],
+            'counter' => 'nullable'
         ]);
         if ($validator->fails()) return response()->json(['errors' => $validator->errors()], 422);
         
