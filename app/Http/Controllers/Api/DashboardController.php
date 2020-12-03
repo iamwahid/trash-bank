@@ -8,6 +8,7 @@ use App\Models\PointHistory;
 use App\Repositories\Backend\BarangRepository;
 use App\Repositories\Backend\WargaRepository;
 use App\Repositories\Frontend\Auth\UserRepository;
+use Arr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -71,14 +72,18 @@ class DashboardController extends Controller
     public function updateProfile(Request $request)
     {
         $validator = Validator::make(request()->all(), [
-            'name' => 'string',
-            'email' => 'string|email',
-            'avatar_type' => 'string',
-            'avatar_location' => 'string',
+            'name' => 'required|string',
+            'email' => 'required|string|email',
+            'mobile' => 'required|string',
+            // 'avatar_type' => 'string',
+            // 'avatar_location' => 'string',
+            'rt' => 'required|string',
+            'address' => 'required|string',
+            'sex' => 'required|string',
         ]);
         if ($validator->fails()) return response()->json(['errors' => $validator->errors()], 422);
         $data = $validator->validated();
-        
+        $user = $request->user();
         $name = explode(' ', $data['name']);
         $first = $name[0];
         unset($name[0]);
@@ -88,10 +93,15 @@ class DashboardController extends Controller
         $data['last_name'] = $last;
 
         $output = $this->user->update(
-            $request->user()->id,
-            $data,
+            $user->id,
+            Arr::only($data, ['first_name', 'last_name', 'email', 'mobile']),
             $request->has('avatar_location') ? $request->file('avatar_location') : false
         );
+
+        if ($user->warga) {
+            $user->warga()->update(Arr::only($data, ['rt', 'address', 'sex']));
+        }
+
 
         // E-mail address was updated, user has to reconfirm
         if (is_array($output) && $output['email_changed']) {

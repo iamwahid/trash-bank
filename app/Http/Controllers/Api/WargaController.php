@@ -39,7 +39,7 @@ class WargaController extends Controller
             // 'place_of_birth' => 'required|string',
             // 'birth_date' => 'required|string',
             'rt' => 'string',
-            'is_koordinator' => 'boolean',
+            // 'is_koordinator' => 'boolean',
             'address' => 'required|string',
             'sex' => 'required|string',
             'confirm_agreement' => 'required',
@@ -72,7 +72,7 @@ class WargaController extends Controller
             'address' => $data['address'],
             'sex' => $data['sex'],
             'rt' => $data['rt'],
-            'is_koordinator' => $data['is_koordinator']
+            // 'is_koordinator' => $data['is_koordinator']
         ]);
 
         return response()->json(['message' => 'created'], 200);
@@ -86,7 +86,7 @@ class WargaController extends Controller
             // 'place_of_birth' => 'required|string',
             // 'birth_date' => 'required|string',
             'rt' => 'string',
-            'is_koordinator' => 'boolean',
+            // 'is_koordinator' => 'boolean',
             'address' => 'string',
             'sex' => 'string',
         ]);

@@ -21,7 +21,7 @@ field = point
 respon = trx_id, status
 
 POST /api/update_profile
-field = name, email, avatar_type, avatar_location
+field = name, email, mobile, rt, address, sex
 
 POST /api/update_password
 field = old_password, password, password_confirmation
@@ -48,14 +48,14 @@ DELETE /api/admin/barang/{id}
 GET /api/admin/warga
 ## create
 POST /api/admin/warga
-field = email, user_name, mobile, address, sex, password, password_confirmation, confirm_agreement, rt [01-14], is_koordinator
+field = email, user_name, mobile, address, sex, password, password_confirmation, confirm_agreement, rt [01-14]
 
 ## show
 GET /api/admin/warga/{id}
 
 ## update
 POST /api/admin/warga/{id}
-field = user_name, address, sex
+field = user_name, address, sex, rt
 
 ## delete
 DELETE /api/admin/warga/{id}
