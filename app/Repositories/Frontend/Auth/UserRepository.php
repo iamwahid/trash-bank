@@ -185,14 +185,15 @@ class UserRepository extends BaseRepository
         $user = $this->getById($id);
         $user->first_name = $input['first_name'];
         $user->last_name = $input['last_name'];
-        $user->avatar_type = $input['avatar_type'];
+        // $user->avatar_type = $input['avatar_type'];
+        $user->mobile = $input['mobile'];
 
         // Upload profile image if necessary
         if ($image) {
             $user->avatar_location = $image->store('/avatars', 'public');
         } else {
             // No image being passed
-            if ($input['avatar_type'] === 'storage') {
+            if (isset($input['avatar_type']) && $input['avatar_type'] === 'storage') {
                 // If there is no existing image
                 if (auth()->user()->avatar_location === '') {
                     throw new GeneralException('You must supply a profile image.');

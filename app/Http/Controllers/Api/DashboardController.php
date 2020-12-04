@@ -105,7 +105,8 @@ class DashboardController extends Controller
 
         // E-mail address was updated, user has to reconfirm
         if (is_array($output) && $output['email_changed']) {
-            auth()->logout();
+            $request->user()->token()->revoke();
+            // auth()->logout();
 
             return response()->json(['message' => 'Email diganti, silahkan login ulang']);
         }
