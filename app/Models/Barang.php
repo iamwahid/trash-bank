@@ -17,7 +17,7 @@ class Barang extends Model
     public $timestamps = false;
 
     protected $casts = [
-        'counter' => 'integer'
+        'counter' => 'float'
     ];
 
     public function getActionsAttribute()

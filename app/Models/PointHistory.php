@@ -20,6 +20,7 @@ class PointHistory extends Model
 
     protected $casts = [
         'verified' => 'boolean',
+        'count' => 'float'
     ];
 
     protected $hidden = [

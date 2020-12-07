@@ -34,7 +34,7 @@ class KasirController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'barang' => 'required',
-            'count' => 'required',
+            'count' => 'required|between:0,999.999',
         ]);
         if ($validator->fails()) return response()->json(['errors' => $validator->errors()], 422);
 

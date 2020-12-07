@@ -28,16 +28,17 @@ class WargaRepository extends BaseRepository
     // for warga
     public function tukarBarang(Warga $warga, Barang $barang, $data)
     {
-        $total = (int) $data['count'] * $barang->point;
+        $count = (float) $data['count'];
+        $total = $count * $barang->point;
         $point_total = $warga->point_total + $total;
-        $data['description'] = $barang->name.' ('.$data['count'].' x '.$barang->point.') '.$total.' Point | '.$point_total.' Point Total';
+        $data['description'] = $barang->name.' ('.$count.' x '.$barang->point.') '.$total.' Point | '.$point_total.' Saldo Total';
         $data['point'] = $barang->point;
         $data['point_total'] = $total;
         $data['type'] = 'tukar';
         $data['verified'] = true;
 
         // update counter
-        $barang->counter = $barang->counter + $data['count'];
+        $barang->counter = $barang->counter + $count;
         $barang->save();
 
         $warga->points()->create($data);
@@ -49,8 +50,8 @@ class WargaRepository extends BaseRepository
     {
         $total = (int)$data['point'];
         
-        if ($total > (int) $warga->point_total) return response()->json(['message' => 'Point tidak cukup'], 422);
-        $data['description'] = 'Ambil '.$total.' Point';
+        if ($total > (int) $warga->point_total) return response()->json(['message' => 'Saldo tidak cukup'], 422);
+        $data['description'] = 'Ambil Saldo '.$total.' Point';
         $data['point'] = $total;
         $data['point_total'] = $total;
         $data['type'] = 'ambil';
@@ -69,11 +70,11 @@ class WargaRepository extends BaseRepository
         
         if ($trx && ($trx->verif_code == $data['verif_code'])) {
             if ($trx->type == 'ambil') {
-                if ($warga->point_total < $trx->point) return response()->json(['message' => 'Point tidak Cukup'], 422);
+                if ($warga->point_total < $trx->point) return response()->json(['message' => 'Saldo tidak Cukup'], 422);
                 $point_total = $warga->point_total - $trx->point_total;
                 $warga->point_total = $point_total;
                 $trx->verified = true;
-                $trx->description = $trx->description . ' | '.$point_total.' Point Total';
+                $trx->description = $trx->description . ' | '.$point_total.' Saldo Total';
                 $trx->save();
                 $warga->save();
             } else {
