@@ -21,7 +21,7 @@
         "hieu-le/active": "^3.5",
         "langleyfoxall/laravel-nist-password-rules": "^4.0",
         "laravel/framework": "5.8.3",
-        "laravel/passport": "7.4",
+        "laravel/passport": "7.3",
         "laravel/tinker": "^1.0",
         "milon/barcode": "6.*",
         "owen-it/laravel-auditing": "^9.0",
@@ -29,8 +29,7 @@
         "spatie/laravel-html": "^2.4",
         "spatie/laravel-permission": "^2.36",
         "torann/geoip": "^1.0",
-        "tymon/jwt-auth": "1.0.0-rc.5",
-        "lcobucci/jwt ": "3.3.3"
+        "lcobucci/jwt": "3.3.3"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",
