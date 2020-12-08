@@ -25,6 +25,7 @@ class WargaController extends Controller
     {
         $warga = $this->user->with('warga')
                 // ->role([])
+                ->where("id", request()->user()->id, '!=')
                 ->rt(request()->get('rt') ?? '')
                 ->name(request()->get('name') ?? '')
                 ->get();
@@ -97,7 +98,7 @@ class WargaController extends Controller
 
         $data = $validator->validated();
         $data = collect($data)->filter()->toArray();
-        
+
         if (isset($data['name'])) {
             $user->name = $data['name'];
             unset($data['name']);
