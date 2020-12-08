@@ -23,7 +23,7 @@ class WargaController extends Controller
 
     public function index()
     {
-        $warga = $this->user->with('warga')
+        $warga = $this->user->with(['warga', 'roles'])
                 // ->role([])
                 ->where("id", request()->user()->id, '!=')
                 ->rt(request()->get('rt') ?? '')
