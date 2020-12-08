@@ -145,10 +145,11 @@ class WargaController extends Controller
         }
     }
 
-    public function assignRole(Warga $warga, Role $role)
+    public function assignRole(User $user, $role)
     {
-        abort_unless($warga->user && $role->id, 404);
-        $warga->user->syncRole([$role]);
+        $role = Role::where('name', $role)->first();
+        abort_unless($user && $role, 404);
+        $user->syncRoles([$role]);
         return response()->json(['message' => "Berhasil ubah sebagai $role->name"]);
     }
 }

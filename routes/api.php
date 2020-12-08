@@ -44,8 +44,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:api', /*'role:admin'*/
     Route::group(['prefix' => 'warga'], function () {
         Route::get('', [WargaController::class, 'index']);
         Route::post('', [WargaController::class, 'store']);
+        Route::post('{user}/as_role/{role_name}', [WargaController::class, 'assignRole']);
         Route::get('{user}', [WargaController::class, 'show']);
-        Route::post('{user}/as_role/{role:name}', [WargaController::class, 'assignRole']);
         Route::post('{user}', [WargaController::class, 'update']);
         Route::delete('{user}', [WargaController::class, 'destroy']);
     });
