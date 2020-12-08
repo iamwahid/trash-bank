@@ -99,7 +99,10 @@ class WargaController extends Controller
 
     public function show(Warga $warga)
     {
-        return response()->json($warga, 200);
+        $type = request()->get('type') ?? '';
+        $war = clone $warga;
+        $war->points = $warga->points()->type($type)->get();
+        return response()->json($war, 200);
     }
 
     public function destroy(Warga $warga)
