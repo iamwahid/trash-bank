@@ -183,10 +183,8 @@ class UserRepository extends BaseRepository
     public function update($id, array $input, $image = false)
     {
         $user = $this->getById($id);
-        $user->first_name = $input['first_name'];
-        $user->last_name = $input['last_name'];
-        // $user->avatar_type = $input['avatar_type'];
-        $user->mobile = $input['mobile'];
+        $user->update(\Arr::only($input, ['first_name', 'last_name', 'mobile']));
+        $user->avatar_type = $input['avatar_type'] ?? 'storage';
 
         // Upload profile image if necessary
         if ($image) {

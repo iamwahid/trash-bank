@@ -366,4 +366,22 @@ class UserRepository extends BaseRepository
             throw new GeneralException(trans('exceptions.backend.access.users.email_error'));
         }
     }
+
+    public function deleteById($id): bool
+    {
+        $this->unsetClauses();
+
+        $user = $this->getById($id);
+        $warga = $user->warga;
+        if ($warga) {
+            $warga->points()->delete();
+            $warga->delete();
+        }
+
+        $user->passwordHistories()->delete();
+        if ($user->forceDelete()) {
+            return true;
+        }
+        return false;
+    }
 }

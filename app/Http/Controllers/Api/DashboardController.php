@@ -72,31 +72,38 @@ class DashboardController extends Controller
     public function updateProfile(Request $request)
     {
         $validator = Validator::make(request()->all(), [
-            'name' => 'required|string',
-            'email' => 'required|string|email',
-            'mobile' => 'required|string',
+            'name' => 'nullable|string',
+            'email' => 'nullable|email|unique:users',
+            'mobile' => 'nullable|string',
+            'password' => 'nullable|min:8|confirmed',
             // 'avatar_type' => 'string',
-            // 'avatar_location' => 'string',
-            'rt' => 'required|string',
-            'address' => 'required|string',
-            'sex' => 'required|string',
+            'avatar_location' => 'nullable',
+            'rt' => 'nullable|string',
+            'address' => 'nullable|string',
+            'sex' => 'nullable|string',
         ]);
         if ($validator->fails()) return response()->json(['errors' => $validator->errors()], 422);
         $data = $validator->validated();
         $user = $request->user();
-        $name = explode(' ', $data['name']);
-        $first = $name[0];
-        unset($name[0]);
-        unset($data['name']);
-        $last = implode(' ', $name);
-        $data['first_name'] = $first;
-        $data['last_name'] = $last;
+        if (isset($data['name'])) {
+            $name = explode(' ', $data['name']);
+            $first = $name[0];
+            unset($name[0]);
+            unset($data['name']);
+            $last = implode(' ', $name);
+            $data['first_name'] = $first;
+            $data['last_name'] = $last;
+        }
 
         $output = $this->user->update(
             $user->id,
             Arr::only($data, ['first_name', 'last_name', 'email', 'mobile']),
             $request->has('avatar_location') ? $request->file('avatar_location') : false
         );
+
+        if (isset($data['password'])) {
+            $user->password = $data['password'];
+        }
 
         if ($user->warga) {
             $user->warga()->update(Arr::only($data, ['rt', 'address', 'sex']));
