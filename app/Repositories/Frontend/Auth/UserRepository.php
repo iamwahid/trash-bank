@@ -206,7 +206,7 @@ class UserRepository extends BaseRepository
             }
         }
 
-        if ($user->canChangeEmail()) {
+        if ($user->canChangeEmail() && isset($input['email'])) {
             //Address is not current address so they need to reconfirm
             if ($user->email !== $input['email']) {
                 //Emails have to be unique

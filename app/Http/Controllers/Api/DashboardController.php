@@ -84,8 +84,11 @@ class DashboardController extends Controller
         ]);
         if ($validator->fails()) return response()->json(['errors' => $validator->errors()], 422);
         $data = $validator->validated();
+
+        $data = collect($data)->filter()->toArray();
+        
         $user = $request->user();
-        if (isset($data['name'])) {
+        if (isset($data['name']) && $data['name']) {
             $name = explode(' ', $data['name']);
             $first = $name[0];
             unset($name[0]);
@@ -101,7 +104,7 @@ class DashboardController extends Controller
             $request->has('avatar_location') ? $request->file('avatar_location') : false
         );
 
-        if (isset($data['password'])) {
+        if (isset($data['password']) && $data['password']) {
             $user->password = $data['password'];
         }
 

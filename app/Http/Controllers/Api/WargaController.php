@@ -96,6 +96,7 @@ class WargaController extends Controller
         if ($validator->fails()) return response()->json(['errors' => $validator->errors()], 422);
 
         $data = $validator->validated();
+        $data = collect($data)->filter()->toArray();
         
         if (isset($data['name'])) {
             $user->name = $data['name'];
