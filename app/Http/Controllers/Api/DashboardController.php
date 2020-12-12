@@ -76,7 +76,6 @@ class DashboardController extends Controller
             'email' => 'nullable|email|unique:users',
             'mobile' => 'nullable|string',
             'password' => 'nullable|min:8|confirmed',
-            // 'avatar_type' => 'string',
             'avatar_location' => 'nullable',
             'rt' => 'nullable|string',
             'address' => 'nullable|string',
@@ -97,10 +96,11 @@ class DashboardController extends Controller
             $data['first_name'] = $first;
             $data['last_name'] = $last;
         }
+        $data['avatar_type'] = 'storage';
 
         $output = $this->user->update(
             $user->id,
-            Arr::only($data, ['first_name', 'last_name', 'email', 'mobile']),
+            Arr::only($data, ['first_name', 'last_name', 'email', 'mobile', 'avatar_type']),
             $request->has('avatar_location') ? $request->file('avatar_location') : false
         );
 

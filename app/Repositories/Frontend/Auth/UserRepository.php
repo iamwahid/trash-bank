@@ -184,7 +184,7 @@ class UserRepository extends BaseRepository
     {
         $user = $this->getById($id);
         $user->update(\Arr::only($input, ['first_name', 'last_name', 'mobile']));
-        $user->avatar_type = $input['avatar_type'] ?? 'storage';
+        $user->avatar_type = $input['avatar_type'];
 
         // Upload profile image if necessary
         if ($image) {
