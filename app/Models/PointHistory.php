@@ -54,9 +54,10 @@ class PointHistory extends Model
         return '';
     }
 
-    public function scopeType($query, $type = '')
+    public function scopeType($query, $type = [])
     {
         if (!$type) return $query;
-        return $query->where('type', $type);
+        if (!is_array($type)) $type = [$type];
+        return $query->whereIn('type', $type);
     }
 }

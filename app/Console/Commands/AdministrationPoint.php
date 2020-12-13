@@ -12,14 +12,14 @@ class AdministrationPoint extends Command
      *
      * @var string
      */
-    protected $signature = 'admin:montlypoint';
+    protected $signature = 'admin:point-audit';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Monthly Point';
+    protected $description = 'Monthly Point Audit';
 
     /**
      * Create a new command instance.

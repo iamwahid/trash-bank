@@ -28,7 +28,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('admin:monthlypoint')->monthlyOn(1, '00:00');
+        $schedule->command('admin:point-audit')->monthlyOn(1, '00:00');
+        // $schedule->exec('php -c php.ini artisan admin:point-audit')->monthlyOn(1, '00:00');
     }
 
     /**

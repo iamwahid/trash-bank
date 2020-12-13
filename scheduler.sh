@@ -1,1 +1,2 @@
-cd /home1/darklogictech/trashbank.darklogictech.com && /usr/local/bin/php -c php.ini artisan schedule:run >> /dev/null 2>&1
+# cd /home1/darklogictech/trashbank.darklogictech.com && /usr/local/bin/php -c php.ini artisan schedule:run >> /dev/null 2>&1
+cd /home1/darklogictech/trashbank.darklogictech.com && php -c php.ini artisan admin:point-audit >> /dev/null 2>&1
