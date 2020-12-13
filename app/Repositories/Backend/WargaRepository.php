@@ -153,4 +153,20 @@ class WargaRepository extends BaseRepository
         return response()->json([], 404);
     }
 
+    public function potongPoint(Warga $warga)
+    {
+        if ($warga->point_total >= 100) {
+            $total = $warga->point_total * 0.1;
+            $data['description'] = 'Biaya Admin 10% : '.$total.' Point';
+            $data['point'] = $total;
+            $data['point_total'] = $total;
+            $data['type'] = 'admin';
+            $data['verified'] = true;
+            $trx = $warga->points()->create($data);
+            $warga->save();
+            return true;
+        }
+        return false;
+    }
+
 }
