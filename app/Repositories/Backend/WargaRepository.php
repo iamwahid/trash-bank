@@ -163,6 +163,7 @@ class WargaRepository extends BaseRepository
             $data['type'] = 'admin';
             $data['verified'] = true;
             $trx = $warga->points()->create($data);
+            $warga->point_total = $warga->point_total - $total;
             $warga->save();
             return true;
         }

@@ -129,7 +129,7 @@ class WargaController extends Controller
 
     public function show(User $user)
     {
-        $type = request()->get('type') ?? '';
+        $type = request()->get('type') ? explode(',', request()->get('type')) : [];
         if (!$user->warga) {
             return response()->json([], 404);
         }

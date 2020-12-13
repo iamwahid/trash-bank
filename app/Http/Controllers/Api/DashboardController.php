@@ -40,7 +40,7 @@ class DashboardController extends Controller
     public function transaksi(Request $request)
     {
         $user = auth()->user();
-        $type = $request->get('type') ?? '';
+        $type = $request->get('type') ? explode(',', $request->get('type')) : [];
         $transaksi = $user->warga->points()->type($type)->get()->map(function($d){
             return $d->append('barcode');
         });
