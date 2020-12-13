@@ -1,0 +1,1 @@
+cd /home1/darklogictech/trashbank.darklogictech.com && /usr/local/bin/php -c php.ini artisan schedule:run >> /dev/null 2>&1
