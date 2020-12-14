@@ -9,6 +9,7 @@ use App\Models\Warga;
 use App\Repositories\Backend\Auth\UserRepository;
 use App\Repositories\Backend\BarangRepository;
 use App\Repositories\Backend\WargaRepository;
+use DB;
 use Illuminate\Support\Facades\Validator;
 
 class KasirController extends Controller
@@ -110,5 +111,16 @@ class KasirController extends Controller
         $data = $validator->validated();
 
         return $this->warga->scanBarcode($data['barcode']);
+    }
+
+    public function getAllPointTotal()
+    {
+        $wargapoints = DB::select("SELECT SUM(point_total) AS total FROM warga");
+        $adminpoints = DB::select("SELECT SUM(point_total) AS total FROM point_history WHERE type = 'admin'");
+        return response()->json( [
+            'warga' => $wargapoints && isset($wargapoints[0]) ? $wargapoints[0]->total : 0,
+            'admin' => $adminpoints && isset($adminpoints[0]) ? $adminpoints[0]->total : 0
+        ]);
+        
     }
 }

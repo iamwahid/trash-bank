@@ -33,6 +33,8 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth:api'], function () {
 
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:api', /*'role:admin'*/]], function () {
+    Route::get('points', [KasirController::class, 'getAllPointTotal']);
+    
     Route::group(['prefix' => 'barang'], function () {
         Route::get('', [BarangController::class, 'index']);
         Route::post('', [BarangController::class, 'store']);
