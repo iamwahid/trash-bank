@@ -38,6 +38,18 @@ class WargaController extends Controller
         $warga = $query->get();
         return response()->json($warga, 200);
     }
+    
+    public function index_per_rt($rt)
+    {
+        // $rt = '03';
+        $warga = $this->user->with(['warga', 'roles'])
+                // ->role([])
+                ->where("id", request()->user()->id, '!=')
+                ->rt(request()->get('rt') ?? $rt)
+                ->name(request()->get('name') ?? '')
+                ->get();
+        return response()->json($warga, 200);
+    }
 
     public function summary()
     {
