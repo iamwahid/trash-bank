@@ -1,12 +1,69 @@
-Barang
- - type 
- - nama
- - point (by kg)
+# API Auth
+```
+POST /api/auth/login
+field = email, password, remember_me
 
- type
+POST /api/auth/signup
+field = email, name, mobile, address, sex, password, password_confirmation, confirm_agreement
+
+GET /api/auth/profile
+GET /api/auth/logout
+POST /api/auth/refresh
+```
+
+# API CRUD Barang 
+jenis barang (type)
  - plastik
-    
  - kertas
  - logam
  - kaca
  - lain
+```
+field = name, point, type
+## list
+GET /api/admin/barang
+## create
+POST /api/admin/barang
+## show
+GET /api/admin/barang/{id}
+## update
+POST /api/admin/barang/{id}
+## delete
+DELETE /api/admin/barang/{id}
+```
+
+# API CRUD Warga
+```
+## list
+GET /api/admin/warga
+## by rt
+GET /api/admin/warga?rt=01
+## summary by rt
+GET /api/admin/warga/summary
+## create
+POST /api/admin/warga
+field = email, user_name, mobile, address, sex, password, password_confirmation, confirm_agreement
+## show
+GET /api/admin/warga/{id}
+## update
+POST /api/admin/warga/{id}
+field = user_name, address, sex
+## delete
+DELETE /api/admin/warga/{id}
+```
+
+base64 andorid image
+byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length); 
+
+kasir lgsung scan
+saldo sistem = sum warga saldo
+####
+kasir
+hitung barang masuk
+hitung uang keluar
+
+hitung barang keluar
+hitung uang masuk
+
+saldo uang & barang sistem

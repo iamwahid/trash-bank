@@ -77,6 +77,14 @@ trait UserMethod
     }
 
     /**
+     * @return mixed
+     */
+    public function isKoordinator()
+    {
+        return $this->hasRole(config('access.users.executive_role'));
+    }
+
+    /**
      * @return bool
      */
     public function isActive()

@@ -23,13 +23,48 @@ class WargaController extends Controller
 
     public function index()
     {
-        $warga = $this->user->with(['warga', 'roles'])
+        $query = $this->user->with(['warga', 'roles'])
                 // ->role([])
                 ->where("id", request()->user()->id, '!=')
-                ->rt(request()->get('rt') ?? '')
-                ->name(request()->get('name') ?? '')
-                ->get();
+                ->name(request()->get('name') ?? '');
+
+        if (request()->user()->isAdmin()) {
+            $query = $query->rt(request()->get('rt') ?? '');
+        } else if (request()->user()->isKoordinator()) {
+            $rt = request()->user()->warga ? request()->user()->warga->rt : "";
+            $query = $query->rt($rt);
+        }
+
+        $warga = $query->get();
         return response()->json($warga, 200);
+    }
+
+    public function summary()
+    {
+        $result = [];
+
+        $query = $this->warga;
+
+        if (request()->user()->isAdmin()) {
+            $warga = $query->get();
+            foreach (config('trashbank.rt_list') as $rt) {
+                $result['rt_point_totals'][$rt] = $warga->where('rt', $rt)->reduce(function($res, $i){
+                    return $res + $i->point_total;
+                }, 0);
+            } 
+        } else if (request()->user()->isKoordinator()) {
+            $rt = request()->user()->warga ? request()->user()->warga->rt : "";
+            if (!$rt) return response()->json($result, 404);
+            $warga = $query->where('rt', $rt)->get();
+            $result = [
+                'rt_point_total' => $warga->reduce(function($res, $i){
+                    return $res + $i->point_total;
+                }, 0),
+            ]; 
+        }
+        
+
+        return response()->json($result, 200);
     }
 
     public function store(Request $request)

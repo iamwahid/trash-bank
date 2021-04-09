@@ -51,7 +51,9 @@ class RoleController extends Controller
     }
     public function indexJson(ManageRoleRequest $request)
     {
-        $resp = $this->roleRepository->with('users', 'permissions')->orderBy('id')->get();
+        $resp = $this->roleRepository
+                // ->with('users', 'permissions')
+                ->orderBy('id')->get();
         return response()->json($resp);
     }
 
@@ -74,9 +76,9 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
-        $this->roleRepository->create($request->only('name', 'associated-permissions', 'permissions', 'sort'));
+        $role = $this->roleRepository->create($request->only('name', 'associated-permissions', 'permissions', 'sort'));
 
-        return redirect()->route('admin.auth.role.index')->withFlashSuccess(__('alerts.backend.roles.created'));
+        return $request->wantsJson() ? response()->json(['message'=> 'created', 'data' => $role]) : redirect()->route('admin.auth.role.index')->withFlashSuccess(__('alerts.backend.roles.created'));
     }
 
     /**
@@ -108,7 +110,7 @@ class RoleController extends Controller
     {
         $this->roleRepository->update($role, $request->only('name', 'permissions'));
 
-        return redirect()->route('admin.auth.role.index')->withFlashSuccess(__('alerts.backend.roles.updated'));
+        return $request->wantsJson() ? response()->json(['message'=> 'updated']) : redirect()->route('admin.auth.role.index')->withFlashSuccess(__('alerts.backend.roles.updated'));
     }
 
     /**
@@ -128,6 +130,6 @@ class RoleController extends Controller
 
         event(new RoleDeleted($role));
 
-        return redirect()->route('admin.auth.role.index')->withFlashSuccess(__('alerts.backend.roles.deleted'));
+        return $request->wantsJson() ? response()->json(['message'=> 'deleted']) : redirect()->route('admin.auth.role.index')->withFlashSuccess(__('alerts.backend.roles.deleted'));
     }
 }

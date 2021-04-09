@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\BarangController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\KasirController;
 use App\Http\Controllers\Api\WargaController;
+use App\Http\Controllers\Backend\Auth\Permission\PermissionController;
 use App\Http\Controllers\Backend\Auth\Role\RoleController;
 use App\Http\Controllers\Backend\Auth\User\UserController;
 use App\Http\Controllers\Backend\BimbinganController;
@@ -45,11 +46,26 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:api', /*'role:admin'*/
 
     Route::group(['prefix' => 'warga'], function () {
         Route::get('', [WargaController::class, 'index']);
+        Route::get('/summary', [WargaController::class, 'summary']);
         Route::post('', [WargaController::class, 'store']);
         Route::post('{user}/as_role/{role_name}', [WargaController::class, 'assignRole']);
         Route::get('{user}', [WargaController::class, 'show']);
         Route::post('{user}', [WargaController::class, 'update']);
         Route::delete('{user}', [WargaController::class, 'destroy']);
+    });
+
+    Route::group(['prefix' => 'role'], function () {
+        Route::get('', [RoleController::class, 'indexJson']);
+        Route::post('', [RoleController::class, 'store']);
+        Route::post('{role}', [RoleController::class, 'update']);
+        Route::delete('{role}', [RoleController::class, 'destroy']);
+    });
+
+    Route::group(['prefix' => 'permission'], function () {
+        Route::get('', [PermissionController::class, 'indexJson']);
+        Route::post('', [PermissionController::class, 'store']);
+        Route::post('{permission}', [PermissionController::class, 'update']);
+        Route::delete('{permission}', [PermissionController::class, 'destroy']);
     });
 
     Route::get('users', [UserController::class, 'indexJson']);
