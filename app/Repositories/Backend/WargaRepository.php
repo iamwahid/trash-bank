@@ -37,6 +37,8 @@ class WargaRepository extends BaseRepository
         $data['type'] = 'tukar';
         $data['verified'] = true;
         $data['barang_id'] = $barang->id;
+        
+        // $data['created_at'] = date('Y-m-d H:i:s');
 
         // update counter
         $barang->counter = $barang->counter + $count;
