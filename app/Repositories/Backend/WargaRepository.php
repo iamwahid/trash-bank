@@ -36,6 +36,7 @@ class WargaRepository extends BaseRepository
         $data['point_total'] = $total;
         $data['type'] = 'tukar';
         $data['verified'] = true;
+        $data['barang_id'] = $barang->id;
 
         // update counter
         $barang->counter = $barang->counter + $count;

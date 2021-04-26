@@ -15,7 +15,8 @@ class PointHistory extends Model
         'point',
         'point_total',
         'verif_code',
-        'verified'
+        'verified',
+        'barang_id'
     ];
 
     protected $casts = [
@@ -30,6 +31,11 @@ class PointHistory extends Model
     public function warga()
     {
         return $this->belongsTo(Warga::class, 'warga_id');
+    }
+
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class, 'barang_id');
     }
 
     public function getActionsAttribute()

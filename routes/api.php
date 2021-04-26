@@ -39,6 +39,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:api', /*'role:admin'*/
     Route::group(['prefix' => 'barang'], function () {
         Route::get('', [BarangController::class, 'index']);
         Route::post('', [BarangController::class, 'store']);
+        Route::get('/summary', [BarangController::class, 'summary']);
         Route::get('{barang}', [BarangController::class, 'show']);
         Route::post('{barang}', [BarangController::class, 'update']);
         Route::delete('{barang}', [BarangController::class, 'destroy']);
