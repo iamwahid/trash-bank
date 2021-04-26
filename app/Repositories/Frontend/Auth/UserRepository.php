@@ -152,6 +152,7 @@ class UserRepository extends BaseRepository
                 $user->warga()->create([
                     'address' => $data['address'],
                     'sex' => $data['sex'],
+                    'rt' => $data['rt'],
                 ]);
             }
 

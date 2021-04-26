@@ -37,6 +37,7 @@ class ApiLoginController extends Controller
             // 'birth_date' => 'required|string',
             'address' => 'required|string',
             'sex' => 'required|string',
+            'rt' => 'required|string',
             'password' => 'required|string|confirmed',
             'confirm_agreement' => 'required|string',
         ]);
